@@ -12,3 +12,6 @@ class Metrics(models.Model):
     installs = models.PositiveIntegerField()
     spend = models.FloatField()
     revenue = models.FloatField()
+
+    class Meta:
+        ordering = ('id',)
