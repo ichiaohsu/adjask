@@ -1,10 +1,5 @@
-from django.shortcuts import render
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics, serializers
 from metrics.models import Metrics
-# from metrics.serializers import MetricSerializer
-
-# from metrics.models import Metrics
-from rest_framework import serializers
 
 from django_filters import rest_framework as filters
 from django.db.models import Sum
@@ -15,7 +10,6 @@ VALID_SHOW_FIELDS = ('impressions', 'clicks', 'installs', 'spend', 'revenue')
 class MetricsFilters(filters.FilterSet):
     date_from = filters.DateFilter(field_name='date', lookup_expr='gte')
     date_to = filters.DateFilter(field_name='date', lookup_expr='lte')
-    # date = filters.DateFromToRangeFilter()
     sort = filters.OrderingFilter(
         # Enable all fields in models to be used in sorting 
         fields = tuple((field.name, field.name) for field in Metrics._meta.fields)
@@ -74,6 +68,16 @@ class MetricSerializer(serializers.ModelSerializer):
     class Meta:
         model = Metrics
         fields = '__all__'
+        extra_fields = ['cpi']
+
+    def get_field_names(self, declared_fields, info):
+        """overwrite default get_field_names in DRF to expand __all__ fields with extra_fields"""
+        expanded_fields = super(MetricSerializer, self).get_field_names(declared_fields, info)
+        
+        if getattr(self.Meta, 'extra_fields', None):
+            return expanded_fields + self.Meta.extra_fields
+        else:
+            return expanded_fields
 
 # Create your views here.
 class MetricsView(generics.ListAPIView):

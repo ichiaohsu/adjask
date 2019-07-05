@@ -13,5 +13,12 @@ class Metrics(models.Model):
     spend = models.FloatField()
     revenue = models.FloatField()
 
+    @property
+    def cpi(self):
+        if self.installs != 0:
+            return (self.spend / self.installs)
+        else:
+            return None
+
     class Meta:
         ordering = ('id',)
