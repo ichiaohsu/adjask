@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '#tvn)!ei7%m(2aq&z1#0!up-&%zcsompm1!l-&d=q2&3xzfbrb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -137,25 +137,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
-LOGGING = {
-    'version': 1,
-    'filters': {
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue',
-        }
-    },
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'filters': ['require_debug_true'],
-            'class': 'logging.StreamHandler',
-        }
-    },
-    'loggers': {
-        'django.db.backends': {
-            'level': 'DEBUG',
-            'handlers':['console'],
-        },
-    },
-}
